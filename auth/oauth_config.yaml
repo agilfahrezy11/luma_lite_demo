@@ -1,0 +1,46 @@
+credentials:
+  usernames:
+    # NOT NEEDED for Google OAuth2!
+
+
+# Pre-authorized users (optional) - users who are automatically logged in
+pre_authorized:
+  emails: []
+  # Example:
+  # - test@example.com
+  # - user@example.com
+
+# Cookie configuration
+cookie:
+  name: epistemx_oauth
+  key: epistemx_secret_key  # Change this to a secure random string
+  expiry_days: 30
+
+# Login authentication configuration
+authentication:
+  # How many failed login attempts before lockout
+  max_failed_login_attempts: 3
+  # Display feature toggles
+  show_reset_password: true
+  show_register_new_user: true
+  # Cookie secret key for session management - use environment variable
+  cookie_secret_key: "${OAUTH_COOKIE_SECRET_KEY}"
+
+# Google OAuth2 Configuration
+# Users will login with their Google email directly - no username needed!
+google_oauth:
+  # Set to true to enable Google OAuth2 login
+  enabled: true
+  # Your Google OAuth2 credentials from Google Cloud Console
+  # SECURITY: Use environment variables instead of hardcoded values
+  client_id: "${GOOGLE_OAUTH_CLIENT_ID}"
+  client_secret: "${GOOGLE_OAUTH_CLIENT_SECRET}"
+  # Redirect URI - MUST match what's configured in Google Cloud Console
+  redirect_uri: "${GOOGLE_OAUTH_REDIRECT_URI}"
+  redirect_uri: "http://localhost:7860"
+  # OAuth2 scopes required
+  scopes:
+    - "https://www.googleapis.com/auth/drive.file"
+    - "https://www.googleapis.com/auth/earthengine"
+    - "https://www.googleapis.com/auth/userinfo.email"
+    - "https://www.googleapis.com/auth/userinfo.profile"
