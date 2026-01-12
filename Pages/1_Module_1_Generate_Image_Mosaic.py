@@ -242,7 +242,7 @@ if date_mode == "Pilih berdasarkan tahun":
     years = list(range(1972, datetime.datetime.now().year + 1))
     years.reverse()  #Newest First
 
-    year = st.selectbox("Pilih tahun", years, index=years.index(2020))
+    year = st.selectbox("Pilih tahun", years, index=years.index(2024))
     start_date = str(year)
     end_date = str(year)
     selected_year = year
@@ -486,12 +486,12 @@ if st.session_state.search_results is not None and st.session_state.detailed_sta
         if thermal_collection is not None:
             thermal_median = thermal_collection.median().clip(aoi)
             #Create multispectral composite using median via final_Image
-            composite = image_processor.get_temporal_composite(collection, aoi, reducer='median', add_band_stats=False, verbose=False)
+            composite = image_processor.get_temporal_composite(collection, aoi, reducer='median', verbose=False)
             #Stack thermal band and ensure float type
             composite = composite.addBands(thermal_median).toFloat()
         else:
             #For Landsat 1-3 MSS: no thermal bands available — use temporal composite
-            composite = image_processor.get_temporal_composite(collection, aoi, reducer='median', add_band_stats=False, verbose=False).toFloat()
+            composite = image_processor.get_temporal_composite(collection, aoi, reducer='median', verbose=False).toFloat()
         
         #Add section for visualization control
         st.subheader("Kombinasi Kanal Majemuk")
@@ -598,8 +598,8 @@ if st.session_state.search_results is not None and st.session_state.detailed_sta
         vis_params = band_combinations[selected_combination].copy()
         
         # If custom is selected, show band selection interface
-        if selected_combination == "Kombinasi saluran bebas":
-            st.info("💡 Pilih satu kanal untuk kombinasi hitam putih dan 3 kanal untuk visualisasi berwarna")
+        if selected_combination == "Buat kombinasi saluran":
+            st.info("💡 Pilih satu kanal untuk visualisasi hitam putih dan 3 kanal untuk visualisasi berwarna")
             
             col_band1, col_band2, col_band3 = st.columns(3)
             
@@ -639,12 +639,12 @@ if st.session_state.search_results is not None and st.session_state.detailed_sta
             
             # Show band combination info
             if len(custom_bands) == 1:
-                st.caption(f"Grayscale visualization using: **{custom_bands[0]}**")
+                st.caption(f"Visualisasi satu saluran menggunakan: **{custom_bands[0]}**")
             elif len(custom_bands) == 3:
-                st.caption(f"RGB visualization: R={custom_bands[0]}, G={custom_bands[1]}, B={custom_bands[2]}")
+                st.caption(f"Visualisasi RGB: R={custom_bands[0]}, G={custom_bands[1]}, B={custom_bands[2]}")
             else:
-                st.warning("⚠️ Please select either 1 band (grayscale) or 3 bands (RGB)")
-                vis_params['bands'] = [band1, band1, band1]  # Fallback to grayscale
+                st.warning("⚠️ Silahkan pilih 1 kanal atau kombinasi kanal (RGB)")
+                vis_params['bands'] = [band1, band1, band1]  #Fallback to grayscale
         
         # Advanced visualization controls in expander
         with st.expander("Pengaturan visualisasi citra", expanded=False):
@@ -686,7 +686,7 @@ if st.session_state.search_results is not None and st.session_state.detailed_sta
                     0.5,
                     float(vis_params['min']),
                     0.01,
-                    help="Adjust the minimum display value",
+                    help="Pengaturan nilai minimal pada tampilan citra",
                     key="vis_min_slider"
                 )
                 max_val = st.slider(
@@ -695,7 +695,7 @@ if st.session_state.search_results is not None and st.session_state.detailed_sta
                     1.0,
                     float(vis_params['max']),
                     0.01,
-                    help="Adjust the maximum display value",
+                    help="Pengaturan nilai maksimal pada tampilan citra",
                     key="vis_max_slider"
                 )
                 
@@ -708,7 +708,7 @@ if st.session_state.search_results is not None and st.session_state.detailed_sta
                 num_bands = len(vis_params['bands'])
                 
                 if num_bands == 3 and isinstance(vis_params['gamma'], list):
-                    st.write("**Nillai Gamma setiap kanal (R, G, B):**")
+                    st.write("**Nilai Gamma setiap kanal (R, G, B):**")
                     gamma_r = st.slider("Red Gamma:", 0.1, 2.0, float(vis_params['gamma'][0]), 0.1, key="gamma_r")
                     gamma_g = st.slider("Green Gamma:", 0.1, 2.0, float(vis_params['gamma'][1]), 0.1, key="gamma_g")
                     gamma_b = st.slider("Blue Gamma:", 0.1, 2.0, float(vis_params['gamma'][2]), 0.1, key="gamma_b")
@@ -741,7 +741,7 @@ if st.session_state.search_results is not None and st.session_state.detailed_sta
                         2.0,
                         float(vis_params['gamma']) if not isinstance(vis_params['gamma'], list) else 1.0,
                         0.1,
-                        help="Adjust image brightness/contrast",
+                        help="Pengaturan tingkat kecerahan dan kontras citra",
                         key="gamma_grayscale"
                     )
                     vis_params['gamma'] = gamma

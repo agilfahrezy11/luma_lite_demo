@@ -13,9 +13,8 @@ import math
 import shapefile
 from shapely.geometry import shape, mapping
 from luma_ge.sample_data import SyncTrainData
-from epistemx.ee_config import initialize_earth_engine
 from modules.nav import Navbar
-from ui_helper import show_header
+from ui_helper import show_header, show_footer
 
 #Page configuration
 st.set_page_config(
@@ -23,10 +22,6 @@ st.set_page_config(
     page_icon="logos/logo_epistem_crop.png",
     layout="wide"
 )
-
-# Initialize Earth Engine
-initialize_earth_engine()
-
 # Initialize session state variables
 session_defaults = {
     'sampling_data': {'type': 'FeatureCollection', 'features': []},
@@ -1804,3 +1799,5 @@ if training_ready and not st.session_state.get('training_data_finalized', False)
     st.info("📋 Data latih tersedia. Klik 'Gunakan Data Latih Ini' untuk melanjutkan ke modul berikutnya.")
 elif not training_ready:
     st.info("⚠️ Silakan kumpulkan data latih menggunakan salah satu metode di atas.")
+#add footer for each page
+show_footer()
