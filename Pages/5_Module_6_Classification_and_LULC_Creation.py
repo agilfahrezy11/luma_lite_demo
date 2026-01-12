@@ -13,7 +13,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import geemap.foliumap as geemap
-from epistemx.module_6_phase1 import FeatureExtraction, Generate_LULC
+from luma_ge.classification import FeatureExtraction, Generate_LULC
 from modules.nav import Navbar
 import numpy as np
 import traceback
@@ -1514,3 +1514,5 @@ if st.session_state.classification_result is not None:
     st.success("Anda telah menyelesaikan modul 6. Silahkan lanjut ke modul berikutnya")
 else:
     st.info("💡 Complete feature extraction and classification to proceed")
+#add footer
+show_footer()

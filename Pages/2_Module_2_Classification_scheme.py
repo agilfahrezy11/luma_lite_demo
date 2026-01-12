@@ -508,3 +508,5 @@ def render_navigation():
 
 # Render navigation
 render_navigation()
+#add footer for each page
+show_footer()

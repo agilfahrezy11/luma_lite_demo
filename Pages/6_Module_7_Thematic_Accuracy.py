@@ -1,6 +1,6 @@
 import streamlit as st
-from epistemx.shapefile_utils import shapefile_validator, EE_converter
-from epistemx.module_7 import Thematic_Accuracy_Assessment
+from luma_ge.input_utils import shapefile_validator, EE_converter
+from luma_ge.accuracy import Thematic_Accuracy_Assessment
 from modules.nav import Navbar
 import pandas as pd
 import geemap.foliumap as geemap
@@ -378,3 +378,4 @@ def render_navigation():
 # Render results and navigation
 render_accuracy_results()
 render_navigation()
+show_footer()

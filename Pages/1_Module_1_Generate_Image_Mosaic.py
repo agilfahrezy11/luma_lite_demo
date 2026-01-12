@@ -11,8 +11,8 @@ Architecture:
 import streamlit as st
 import geemap.foliumap as geemap
 import geopandas as gpd
-from epistemx.module_1 import Reflectance_Data, Reflectance_Stats, final_Image
-from epistemx.shapefile_utils import shapefile_validator, EE_converter
+from luma_ge.data_acquisition import Reflectance_Data, Reflectance_Stats, final_Image
+from luma_ge.input_utils import shapefile_validator, EE_converter
 from epistemx.ee_config import (
     setup_google_drive_oauth,
     is_user_authenticated,
@@ -29,7 +29,7 @@ import os
 import ee
 import datetime
 import pandas as pd
-from ui_helper import show_header
+from ui_helper import show_header, show_footer
 
 # Page configuration
 st.set_page_config(
@@ -1380,3 +1380,6 @@ if st.session_state.composite is not None:
 else:
     st.button("🔒 Selesaikan Modul 1 terlebih dahulu", disabled=True)
     st.info("Buat gabungan citra terlebih dahulu sebelum melanjutkan.")
+
+#add footer for each page
+show_footer()

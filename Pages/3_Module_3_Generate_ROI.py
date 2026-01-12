@@ -11,11 +11,11 @@ import zipfile
 import os
 import math
 import shapefile
-from shapely.geometry import shape, Point, Polygon, mapping
-from epistemx.module_3 import SyncTrainData
+from shapely.geometry import shape, mapping
+from luma_ge.sample_data import SyncTrainData
 from epistemx.ee_config import initialize_earth_engine
 from modules.nav import Navbar
-from ui_helper import show_footer, show_header
+from ui_helper import show_header
 
 #Page configuration
 st.set_page_config(
