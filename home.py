@@ -3,13 +3,13 @@ import leafmap.foliumap as leafmap
 from luma_ge import auto_initialize
 from modules.nav import Navbar
 import os
-import tempfile
 from ui_helper import show_footer, show_header, show_hero_banner
 
 st.set_page_config(
     page_title="Luma Beranda",
     page_icon="logos/logo_epistem_crop.png",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 # Load custom CSS
 def load_css():
@@ -36,7 +36,7 @@ if 'ee_initialized' not in st.session_state:
         result = auto_initialize()
         st.session_state.ee_initialized = result
         if result:
-            st.success("Earth Engine berhasil diinisialisasi!")
+            st.success("Earth Engine berhasil terhubung!")
         else:
             st.error("Gagal menginisialisasi Earth Engine. Mohon periksa autentikasi Anda.")
     except Exception as e:
@@ -104,7 +104,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-st.markdown('<div class="module-header">📋 Modul - Modul Epistem</div>', unsafe_allow_html=True)
+st.markdown('<div class="module-header">📋 Modul - Modul Luma</div>', unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -143,13 +143,30 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# Call-to-action button
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    if st.button(
+        "🚀 Mulai jelajahi modul",
+        use_container_width=True,
+        key="explore_modules_btn",
+        help="Klik untuk membuka Modul 1"
+    ):
+        st.switch_page("pages/1_Module_1_Generate_Image_Mosaic.py")
+
+st.markdown(
+    "<div style='text-align: center; color: #666; font-size: 14px; margin: 15px 0;'>atau gunakan menu samping untuk menjelajahi modul lainnya</div>",
+    unsafe_allow_html=True
+)
+
 # Status indicator
 if st.session_state.get('ee_initialized', False):
     st.markdown('<div class="success-message">✅ Earth Engine Siap - Anda dapat melanjutkan analisis</div>', unsafe_allow_html=True)
 else:
     st.markdown('<div class="warning-message">⚠️ Earth Engine Belum Diinisialisasi - Mohon periksa autentikasi</div>', unsafe_allow_html=True)
-
 st.markdown('<div class="map-container-fullwidth">', unsafe_allow_html=True)
+
+#This section did not serve any purpose, only to make the home page look better
 m = leafmap.Map(center=[-2.5, 118.0], zoom=5)
 m.add_basemap("OpenTopoMap")
 m.to_streamlit(height=500)

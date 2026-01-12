@@ -129,7 +129,7 @@ def show_hero_banner():
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h2>Selamat Datang di</h2>
-    <h1>Platform Pemetaan Tutupan Lahan<br>Epistem-X</h1>
+    <h1>Platform Pemetaan Tutupan Lahan<br><i>Land Use Mapping for All (LUMA)</i></h1>
     <p>Wahana pemetaan bentang lahan <i>open-source</i> yang ramah pengguna, dirancang untuk meningkatkan partisipasi & transparansi dalam penyediaan data berkualitas bagi pengelolaan bentang lahan di Indonesia.
     <br>
     Didukung oleh pengindraan jauh, pembelajaran mesin, dan data partisipatif untuk memperkuat upaya restorasi dan pencegahan deforestasi.

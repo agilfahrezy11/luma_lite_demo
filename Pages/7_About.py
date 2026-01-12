@@ -3,7 +3,7 @@ from modules.nav import Navbar
 from ui_helper import show_footer, show_header
 
 st.set_page_config(
-    page_title="Tentang Epistem-X",
+    page_title="Tentang Luma",
     page_icon="logos/logo_epistem_crop.png",
     layout="wide"
 )
@@ -25,7 +25,7 @@ Navbar()
 # Header
 st.markdown("""
 <div class="main-header">
-    <h1>Tentang Epistem-X</h1>
+    <h1>Tentang Luma</h1>
     <p>Wahana pemetaan bentang lahan <i>open-source</i> yang ramah pengguna untuk pemantauan, restorasi, dan pengelolaan bentang lahan di Indonesia.</p>
 </div>
 """, unsafe_allow_html=True)

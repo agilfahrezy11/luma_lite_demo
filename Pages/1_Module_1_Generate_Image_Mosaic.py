@@ -24,7 +24,7 @@ from ui_helper import show_header, show_footer
 
 # Page configuration
 st.set_page_config(
-    page_title="Epistem-X Modul 1",
+    page_title="Luma Modul 1",
     page_icon="logos/logo_epistem_crop.png",
     layout="wide"
 )
@@ -73,7 +73,7 @@ Modul ini memungkinkan pengguna untuk mencari dan menghasilkan gabungan citra sa
 """
 # Add navigation sidebar
 Navbar()
-#Initialize session state for storing collection, composite, aoi, AOI that has been converted to gdf, and export task
+#Initialize session state for storing collection, composite, AOI that has been converted to gdf, and export task
 #similar to a python dict, we fill it later
 if 'collection' not in st.session_state:
     st.session_state.collection = None
@@ -104,7 +104,8 @@ if 'task_cache' not in st.session_state:
 if 'last_cache_update' not in st.session_state:
     st.session_state.last_cache_update = {}
 
-# (Google Drive integration removed) - export options limited to direct download and GCS
+#(Google Drive integration removed) - export options limited to direct download and GCS
+#will be added later once multi-page authentication is solved
 
 #Cache task status with time to live to reduce API calls
 def get_cached_task_status(task_id, cache_ttl=30):

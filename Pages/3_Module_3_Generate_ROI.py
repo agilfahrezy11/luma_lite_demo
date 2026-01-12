@@ -18,7 +18,7 @@ from ui_helper import show_header, show_footer
 
 #Page configuration
 st.set_page_config(
-    page_title="Epistem-X Modul 3",
+    page_title="Luma Modul 3",
     page_icon="logos/logo_epistem_crop.png",
     layout="wide"
 )
