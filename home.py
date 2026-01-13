@@ -36,13 +36,12 @@ if 'ee_initialized' not in st.session_state:
         result = auto_initialize()
         st.session_state.ee_initialized = result
         if result:
-            st.success("Earth Engine berhasil terhubung!")
+            st.success("✅ Google Earth Engine Terhubung!")
         else:
-            st.error("Gagal menginisialisasi Earth Engine. Mohon periksa autentikasi Anda.")
+            st.error("⚠️ Earth Engine Belum Terhubung")
     except Exception as e:
         st.error(f"Earth Engine initialization error: {e}")
         st.session_state.ee_initialized = False
-
 # Add navigation sidebar
 Navbar()
 
@@ -155,16 +154,10 @@ with col2:
         st.switch_page("pages/1_Module_1_Generate_Image_Mosaic.py")
 
 st.markdown(
-    "<div style='text-align: center; color: #666; font-size: 14px; margin: 15px 0;'>atau gunakan menu samping untuk menjelajahi modul lainnya</div>",
+    "<div style='text-align: center; color: #666; font-size: 14px; margin: 15px 0;'>Cari citra pertama mu melalui modul pertama</div>",
     unsafe_allow_html=True
 )
 
-# Status indicator
-if st.session_state.get('ee_initialized', False):
-    st.markdown('<div class="success-message">✅ Earth Engine Siap - Anda dapat melanjutkan analisis</div>', unsafe_allow_html=True)
-else:
-    st.markdown('<div class="warning-message">⚠️ Earth Engine Belum Diinisialisasi - Mohon periksa autentikasi</div>', unsafe_allow_html=True)
-st.markdown('<div class="map-container-fullwidth">', unsafe_allow_html=True)
 
 #This section did not serve any purpose, only to make the home page look better
 m = leafmap.Map(center=[-2.5, 118.0], zoom=5)

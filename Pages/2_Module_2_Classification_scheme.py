@@ -105,6 +105,14 @@ st.markdown("""
 <h1 class="gradient-title">Menentukan Skema Klasifikasi<br>Peta Tutupan/Penggunaan Lahan</h1>
 """, unsafe_allow_html=True)
 st.divider()
+st.markdown("""
+Dalam modul ini, Anda akan menentukan skema klasifikasi, yaitu daftar kategori tutupan atau penggunaan lahan yang ingin 
+dipetakan di wilayah kajian Anda. Penentuan skema klasifikasi harus sesuai dengan tujuan pemetaan dengan pertimbangan skala peta dan resolusi spasial citra yang digunakan. 
+Anda dapat menentukan skema klasifikasi sendiri atau menggunakan skema klasifikasi yang dibuat oleh suatu lembaga. Contoh skema klasifikasi yang umumnya digunakan di Indonesia adalah:
+    - SNI: 
+
+""")
+
 
 st.markdown("""
 <style>
@@ -125,19 +133,29 @@ st.markdown("""
   flex-shrink: 0;
 }
 </style>
-<p>Dalam modul ini, Anda perlu menentukan skema klasifikasi yang akan digunakan untuk membuat peta tutupan lahan.</p>
-<p>Terdapat tiga metode yang didukung dalam platform ini:</p>
+<p>Dalam modul ini, Anda akan menentukan <strong>skema klasifikasi</strong> - yaitu daftar kategori tutupan lahan yang ingin dipetakan di wilayah kajian Anda. Misalnya: hutan, sawah, pemukiman, atau badan air.</p>
+<p>Contoh skema klasifikasi yang umumnya diterapkan di Indonesia adalah Sistem 
+<p><strong>Mengapa penting?</strong> Skema klasifikasi menentukan jenis-jenis tutupan lahan yang akan diidentifikasi dan dipetakan. Ini menjadi dasar untuk analisis perubahan lahan dan perencanaan wilayah.</p>
+
+<p><strong>Contoh penggunaan:</strong></p>
+<ul style="margin-left: 20px;">
+  <li>Monitoring deforestasi → fokus pada kelas "Hutan" dan "Lahan Terbuka"</li>
+  <li>Perencanaan kota → pisahkan "Pemukiman", "Jalan", dan "Ruang Terbuka Hijau"</li>
+  <li>Pertanian → bedakan "Sawah", "Kebun", dan "Lahan Kering"</li>
+</ul>
+
+<p>Pilih salah satu dari tiga metode berikut:</p>
 <div class="check-item">
   <div class="check-icon"></div>
-  <p><strong>Input Manual</strong>:<br>Tambahkan kelas satu per satu</p>
+  <p><strong>Input Manual</strong>:<br>Buat kelas satu per satu sesuai kebutuhan spesifik Anda</p>
 </div>
 <div class="check-item">
   <div class="check-icon"></div>
-  <p><strong>Unggah CSV</strong>:<br>Impor dari berkas klasifikasi yang sudah ada</p>
+  <p><strong>Unggah CSV</strong>:<br>Gunakan daftar kelas yang sudah Anda buat sebelumnya</p>
 </div>
 <div class="check-item">
   <div class="check-icon"></div>
-  <p><strong>Skema Bawaan</strong>:<br>Gunakan kelas yang berdasarkan skema RESTORE+</p>
+  <p><strong>Skema Bawaan</strong>:<br>Mulai dengan template standar RESTORE+ yang sudah teruji</p>
 </div>
 """, unsafe_allow_html=True)
 

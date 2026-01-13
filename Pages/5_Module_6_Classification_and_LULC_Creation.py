@@ -206,7 +206,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["Ekstraksi Fitur/Nilai Piksel", "Latih M
 #Option to either use all of the training data for classification, or split them into train and test data
 #This section can be change to module 3 (?)
 with tab1:
-    st.header("Pengaturan ekstraksi data citra")
+    st.header("Pengaturan ekstraksi nilai piksel")
     markdown = """ 
     Langkah pertama dalam klasifikasi adalah mengekstrak nilai piksel dari data citra untuk setiap kelas ROI. Sebelum mengekstrak piksel, Anda harus menentukan apakah akan membagi ROI menjadi data pelatihan dan pengujian.
     Jika Anda memutuskan untuk membagi data, Anda akan dapat mengevaluasi model klasifikasi sebelum menghasilkan klasifikasi tutupan lahan.
@@ -220,13 +220,13 @@ with tab1:
         st.subheader("Opsi Pembagian Data")
         # Option to split data
         split_data = st.checkbox(
-            "Bagi data menjadi subset pelatihan dan pengujian",
+            "Bagi data menjadi subset data latih dan uji",
             value=True,
-            help="Jika tidak dicentang, seluruh data referensi akan digunakan untuk melatih model klasifikasi"
+            help="Jika tidak dicentang, seluruh data akan digunakan untuk melatih model klasifikasi"
         )
         #What happened if the user choose to split the data
         if split_data:
-            st.info("ROI dibagi menjadi data pelatihan dan pengujian menggunakan pendekatan pembagian acak berstrata")
+            st.info("Sampel dibagi menjadi data latih dan uji menggunakan pendekatan pembagian acak berstrata (*stratified random sampling*)")
             
             #Split ratio
             split_ratio = st.slider(
@@ -235,7 +235,7 @@ with tab1:
                 max_value=0.9,
                 value=0.7,
                 step=0.05,
-                help="Proporsi data yang digunakan untuk pelatihan"
+                help="Proporsi data yang digunakan untuk melatih model"
             )
             #information about the proportion
             st.metric("Training", f"{split_ratio*100:.0f}%", delta=None)
@@ -245,7 +245,7 @@ with tab1:
             st.warning("Seluruh data ROI akan digunakan untuk pelatihan. Siapkan dataset pengujian independen.")
     #Second column, prepared the extraction parameters 
     with col2:
-        st.subheader("Parameter ekstrasi data")
+        st.subheader("Parameter ekstrasi piksel")
         #Get class property from previous module if available. What the user choose for separability analysis, will be used here
         default_class_prop = st.session_state.get('selected_class_property', 'class')
         #Class property name
@@ -309,10 +309,10 @@ with tab1:
                     
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.metric("Training Samples", training_data.size().getInfo())
+                        st.metric("Jumlah piksel latih", training_data.size().getInfo())
                     with col2:
-                        st.metric("Testing Samples", testing_data.size().getInfo())
-                    st.success("✅ Ekstraksi fitur selesai!")
+                        st.metric("Jumlah piksel uji", testing_data.size().getInfo())
+                    st.success("✅ Ekstraksi piksel selesai!")
                 else:
                     training_data = image.sampleRegions(
                         collection=roi_ee,
@@ -323,7 +323,7 @@ with tab1:
                     st.session_state.extracted_training_data = training_data
                     st.session_state.extracted_testing_data = None
                     st.session_state.class_property = class_property
-                    st.info("ℹ️ Semua data ROI telah digunakan untuk pelatihan. Tidak ada set pengujian yang dibuat.")
+                    st.info("ℹ️ Semua data digunakan untuk pelatihan. Tidak ada sampel untuk menguji model.")
             #error log if something fail    
             except Exception as e:
                 st.error(f"Kesalahan saat ekstraksi fitur: {e}")
@@ -333,18 +333,16 @@ with tab1:
 # ==================== Tab 2: Model Learning ====================
 with tab2:
     st.header("Membuat model klasifikasi")
-    
     #introduction
     st.markdown("""
     Di bagian ini, dilakukan proses klasifikasi digital untuk mengelompokkan pola penutup lahan pada citra satelit.
     Bayangkan anda menyuruh komputer untuk mengenali pola - pola, selayaknya anda melihat pola penutup lahan yang berbeda secara visual.
     """)
-    
-    #Algorithm explanation with visual
+    #Algorithm explanation
     with st.expander("🤔 Bagaimana Model Random Forest Mengenali Pola? (Click to learn more)", expanded=False):
         st.markdown("""
         **Random Forest:** Bayangkan model ini sebagai sekelompok ilmuwan ('pohon') 
-        yang memberikan suara (voting) terkait jenis piksel pada citra satelit. 
+        yang memberikan suara (*voting*) terkait jenis piksel pada citra satelit. 
         Proses pengelompokan nilai piksel menjadi kelas penutup lahan adalah sebagai berikut:
         
         🌲 **Setiap "Pohon"** mempertimbangkan kombinasi nilai piksel yang berbeda pada setiap kanal spektral
@@ -365,18 +363,18 @@ with tab2:
         st.success("✅ Proses ekstraksi nilai piksel selesai. Proses pelatihan model dapat dilakukan")
         
         #Model Config with explanations
-        st.subheader("⚙️ Pengaturan Model Klasifikasi")
-        with st.expander("Kenapa Model klasifikasi perlu diatur?", expanded = False):
+        st.subheader("Pengaturan Parameter Klasifikasi")
+        with st.expander("Kenapa Parameter klasifikasi Perlu Diatur?", expanded = False):
             st.markdown(""" 
-            Setiap model machine learning memiliki beberapa parameter yang mengendalikan bagaimana mesin
+            Setiap model *machine learning* memiliki beberapa parameter yang mengendalikan bagaimana mesin
             mempelajari hubungan antara variabel dan pola data yang diberikan. Oleh karena itu, 
             pengaturean parameter ini dapat mempengaruhi kualitas model dan klasifikasi yang dihasilkan.
             """
             )
             st.markdown("Algoritma Random Forest memiliki beberapa parameter utama yang mempengaruhi kemampuannya untuk mempelajari pola")
-            st.markdown("1. Jumlah Pohon Keputusan (number of trees)")
-            st.markdown("2. Jumlah variabel yang dipertimbangkan saat pengambilan keputusan (variable_per_split)")
-            st.markdown("3. Jumlah sampel yang dipertimbangkan untuk memecah sebuah daun dalam pohon keputusan (min leaf population)")
+            st.markdown("1. Jumlah Pohon Keputusan (***number of trees***)")
+            st.markdown("2. Jumlah variabel yang dipertimbangkan saat pengambilan keputusan (***variable_per_split***)")
+            st.markdown("3. Jumlah sampel yang dipertimbangkan untuk memecah sebuah daun dalam pohon keputusan (***min leaf population***)")
         
         #Create tabs for preset value, or manuall setting
         config_tab1, config_tab2 = st.tabs(["Pengaturan Umum", "Pengaturan manual"])

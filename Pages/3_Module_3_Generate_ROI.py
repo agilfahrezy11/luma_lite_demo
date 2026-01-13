@@ -734,7 +734,7 @@ else:
                         st.success("Data latih berhasil dimuat!")
 
                         TrainField = st.selectbox(
-                            "Pilih field yang berisi informasi nama kelas:",
+                            "Pilih kolom yang berisi informasi nama kelas (pastikan nama kelas sama dengan skema klasifikasi):",
                             options=["-- Pilih Field --"] + gdf.columns.tolist(),
                             help="Field ini harus berisi informasi nama kelas yang sesuai dengan skema klasifikasi Anda"
                         )

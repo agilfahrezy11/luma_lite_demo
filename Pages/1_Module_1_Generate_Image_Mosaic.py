@@ -348,7 +348,7 @@ if st.button("Cari citra satelit", type="primary") and st.session_state.aoi is n
                 except:
                     total_images = 0
         
-        st.success(f"Tersedia {total_images} grid lembar citra.")
+        st.success(f"Ditemukan {total_images} grid lembar citra yang sesuai dengan kriteria pencarian anda.")
 
         #Store the metadata for export
         st.session_state.search_metadata = {
@@ -375,7 +375,8 @@ if st.button("Cari citra satelit", type="primary") and st.session_state.aoi is n
 
             # Show a short congratulatory notice and celebration
             try:
-                st.success("🎉 Pencarian citra berhasil — Anda menyelesaikan langkah pencarian citra!")
+                st.success("🎉 Pencarian citra berhasil — Anda menyelesaikan modul 1!")
+                st.info("Anda dapat mengunduh citra atau melanjutkan ke modul 2")
                 st.balloons()
             except Exception:
                 # If the environment doesn't support balloons, silently ignore
