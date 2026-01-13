@@ -5,7 +5,7 @@ This module provides a user interface for defining land cover classification sch
 through three methods: manual input, CSV upload, or default templates.
 
 Architecture:
-- Backend (src_modul_2.py): Pure business logic without UI dependencies
+- Backend (classification_scheme.py): Core backend code for classification scheme manager
 - Frontend (this file): Streamlit UI with session state management
 - State synchronization ensures data persistence across page interactions
 """
@@ -105,14 +105,6 @@ st.markdown("""
 <h1 class="gradient-title">Menentukan Skema Klasifikasi<br>Peta Tutupan/Penggunaan Lahan</h1>
 """, unsafe_allow_html=True)
 st.divider()
-st.markdown("""
-Dalam modul ini, Anda akan menentukan skema klasifikasi, yaitu daftar kategori tutupan atau penggunaan lahan yang ingin 
-dipetakan di wilayah kajian Anda. Penentuan skema klasifikasi harus sesuai dengan tujuan pemetaan dengan pertimbangan skala peta dan resolusi spasial citra yang digunakan. 
-Anda dapat menentukan skema klasifikasi sendiri atau menggunakan skema klasifikasi yang dibuat oleh suatu lembaga. Contoh skema klasifikasi yang umumnya digunakan di Indonesia adalah:
-    - SNI: 
-
-""")
-
 
 st.markdown("""
 <style>
@@ -120,7 +112,7 @@ st.markdown("""
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 .check-icon {
   width: 20px;
@@ -132,36 +124,42 @@ st.markdown("""
   mask-size: contain;
   flex-shrink: 0;
 }
+.scheme-item {
+  margin-bottom: 10px;
+  padding: 8px 0;
+}
 </style>
-<p>Dalam modul ini, Anda akan menentukan <strong>skema klasifikasi</strong> - yaitu daftar kategori tutupan lahan yang ingin dipetakan di wilayah kajian Anda. Misalnya: hutan, sawah, pemukiman, atau badan air.</p>
-<p>Contoh skema klasifikasi yang umumnya diterapkan di Indonesia adalah Sistem 
-<p><strong>Mengapa penting?</strong> Skema klasifikasi menentukan jenis-jenis tutupan lahan yang akan diidentifikasi dan dipetakan. Ini menjadi dasar untuk analisis perubahan lahan dan perencanaan wilayah.</p>
 
-<p><strong>Contoh penggunaan:</strong></p>
-<ul style="margin-left: 20px;">
-  <li>Monitoring deforestasi → fokus pada kelas "Hutan" dan "Lahan Terbuka"</li>
-  <li>Perencanaan kota → pisahkan "Pemukiman", "Jalan", dan "Ruang Terbuka Hijau"</li>
-  <li>Pertanian → bedakan "Sawah", "Kebun", dan "Lahan Kering"</li>
+<p>Dalam modul ini, Anda akan menentukan skema klasifikasi, yaitu daftar kategori tutupan atau penggunaan lahan yang ingin dipetakan di wilayah kajian Anda.</p>
+
+<p>Penentuan skema klasifikasi harus sesuai dengan tujuan pemetaan dengan pertimbangan skala peta dan resolusi spasial citra yang digunakan. Anda dapat menentukan skema klasifikasi sendiri atau menggunakan skema klasifikasi yang dibuat oleh suatu lembaga.</p>
+
+<p><strong>Mengapa skema klasifikasi perlu ditentukan?</strong> Skema klasifikasi menjadi dasar bagaimana anda mengelompokkan fitur lahan yang ada di wilayah yang ingin dipetakan. Skema klasifikasi juga bertujuan untuk menyamakan persepsi terhadap suatu lahan sehingga memperluas penerapan peta yang dihasilkan. </p>
+
+<p><strong>Contoh skema klasifikasi yang umumnya digunakan di Indonesia:</strong></p>
+<ul style="margin-left: 20px; margin-bottom: 12px;">
+  <li class="scheme-item"><strong>SNI 7645:2014:</strong> Skema klasifikasi umum dengan kategorisasi terpisah antara penutup dan penggunaan lahan. Terdapat 3 level klasifikasi dengan skala 1:25000, 1:250000, dan 1:1000000.</li>
+  <li class="scheme-item"><strong>Skema Klasifikasi Kementerian Kehutanan:</strong> Berdasarkan Peraturan Direktur Jenderal Planologi Kehutanan Nomor P.1/VII-IPSDH/2015, dengan fokus utama pada pengelolaan kawasan hutan.</li>
+  <li class="scheme-item"><strong>Anderson Classification System (1976):</strong> Skema klasifikasi yang dibuat oleh USGS dengan fokus pada penggunaan lahan dan pengelolaan sumber daya.</li>
+  <li class="scheme-item"><strong>FAO Land Cover Classification System (LCCS):</strong> Skema klasifikasi yang bersifat modular dan dapat diterapkan untuk berbagai kajian.</li>
 </ul>
 
-<p>Pilih salah satu dari tiga metode berikut:</p>
+<p><strong>Pilih salah satu dari tiga metode berikut:</strong></p>
 <div class="check-item">
   <div class="check-icon"></div>
-  <p><strong>Input Manual</strong>:<br>Buat kelas satu per satu sesuai kebutuhan spesifik Anda</p>
+  <p><strong>Input Manual:</strong><br>Buat kelas satu per satu sesuai kebutuhan spesifik Anda</p>
 </div>
 <div class="check-item">
   <div class="check-icon"></div>
-  <p><strong>Unggah CSV</strong>:<br>Gunakan daftar kelas yang sudah Anda buat sebelumnya</p>
+  <p><strong>Unggah CSV:</strong><br>Gunakan daftar kelas yang sudah Anda buat sebelumnya</p>
 </div>
 <div class="check-item">
   <div class="check-icon"></div>
-  <p><strong>Skema Bawaan</strong>:<br>Mulai dengan template standar RESTORE+ yang sudah teruji</p>
+  <p><strong>Skema Bawaan:</strong><br>Mulai dengan template standar RESTORE+ yang sudah teruji</p>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
-
-
 #Tab layout for different classification definition
 tab1, tab2, tab3 = st.tabs(["➕ Input Manual", "📤 Unggah CSV", "📋 Skema Bawaan"])
 
@@ -365,7 +363,68 @@ with tab2:
 # Tab 3: Default Scheme
 with tab3:
     st.markdown("####  Muat Skema Klasifikasi Bawaan")
-    st.info("Mulai dengan kelas tutupan/penggunaan lahan RESTORE+")
+    with st.expander("Skema klasifikasi Bawaan", expanded=False):
+            #Basic, how image is created
+            st.markdown("#### Apa itu skema klasifikasi bawaan?")
+            st.markdown("""
+            Platform LUMA memberikan daftar kelas berdasarkan beberapa skema klasifikasi yang umum digunakan. Saat ini skema klasifikasi bawaan yang tersedia adalah
+            skema klasifikasi RESTORE+. Skema klasifikasi lainnya akan tersedia di pembaruan mendatang.
+            
+            RESTORE+ merupakan inisiatif yang bertujuan untuk meningkatkan kapasitas perencanaan penggunaan lahan di Indonesia dan Brasil. Salah satu hasil dari proyek tersebut adalah skema klasifikasi 
+            penutup dan penggunaan lahan beserta data latih 
+    """)
+            with st.expander("Skema klasifikasi Restore+", expanded=False):
+                st.markdown(""" 
+            Skema klasifikasi ini dirancang untuk upaya restorasi nasional dengan resolusi spasial 100 m (1 ha). Daftar kelas yang digunakan adalah sebagai berikut:
+            
+    """)
+                #RESTORE+ Classification class description (keep it in Indonesia)
+                restore_plus_data = [
+                    #1 class
+                    {'ID': 1, 'Class Name': 'Hutan Lahan Kering Primer (Undisturbed dry-land forest)', 
+                     'Description': 'Tutupan hutan alami dengan kanopi yang rapat (>80%), spesies yang sangat beragam dan basal area yang relative tinggi. '
+                     'Secara mudah, hutan ini diindikasikan tidak adanya jalan logging. Pada citra satelit, diindikasikan dengan nilai index vegetasi dan band infrared yang tinggi, dan band tampak (visible) yang rendah.'},
+                    {'ID': 2, 'Class Name': 'Hutan Lahan Kering Sekunder (Logged-over dry-land forest)', 
+                     'Description': 'Tutupan hutan alam dengan kerapatan pohon bervariasi (30–80%) '
+                     'yang telah mengalami gangguan aktivitas manusia maupun aktivitas alam lainnya yang biasanya dicirikan oleh adanya jalan logging maupun bekas tebangan.'},
+                    {'ID': 3, 'Class Name': 'Hutan Mangrove Primer (Undisturbed mangrove)', 
+                     'Description': 'Tutupan hutan yang didominasi oleh pohon bakau yang berlokasi pada pesisir pantai dan tidak pernah mengalami penebangan maupun aktivitas manusia lainnya.'},
+                    {'ID': 4, 'Class Name': 'Hutan Mangrove Sekunder (Logged-over mangrove)',
+                     'Description': 'Tutupan hutan yang didominasi oleh pohon bakau yang telah mengalami degradasi, berlokasi di sekitar pesisir pantai dan pernah mengalami penebangan maupun aktivitas manusia lainnya.'},
+                    {'ID': 5, 'Class Name': 'Hutan Rawa Primer (Undisturbed swamp forest)',
+                     'Description': 'Tutupan vegetasi alami pada lahan basah yang tergenang sementara maupun permanen, '
+                     'tidak pernah mengalami penebangan maupun pengaruh aktivitas manusia, dicirikan dengan tidak adanya jalan logging, parit, atau kanal.'},
+                    {'ID': 6, 'Class Name': 'Hutan Rawa Sekunder (Logged-over swamp forest)', 
+                     'Description': 'Tutupan vegetasi alami pada lahan basah yang tergenang sementara maupun permanen yang telah mengalami penebangan maupun pengaruh aktivitas manusia, dicirikan adanya jalan logging, parit, atau kanal.'},
+                    {'ID': 7, 'Class Name': 'Agroforestri (Agroforestry)',
+                     'Description': 'Tutupan vegetasi campuran antara komoditas perkebunan, buah-buahan, pohon berkayu, dan tanaman semusim yang tumbuh bersama dalam satu lahan.'},
+                    {'ID': 8, 'Class Name': 'Hutan Tanaman (Plantation forest)',
+                     'Description': 'Tutupan vegetasi pohon berkayu yang ditanam secara monokultur untuk tujuan komersial seperti akasia, eucalyptus, pinus, jati, sengon, dan lainnya.'},
+                    {'ID': 9, 'Class Name': 'Karet Monokultur (Rubber monoculture)',
+                     'Description': 'Tutupan vegetasi yang hampir 100% didominasi tanaman karet dalam satu lahan.'},
+                    {'ID': 10, 'Class Name': 'Kelapa Sawit Monokultur (Oil palm monoculture)',
+                     'Description': 'Tutupan vegetasi yang hampir 100% didominasi tanaman kelapa sawit dalam satu lahan.'},
+                    {'ID': 11, 'Class Name': 'Monokultur Lainnya (Other monoculture)',
+                     'Description': 'Tutupan vegetasi yang hampir 100% didominasi tanaman perkebunan selain karet dan kelapa sawit.'},
+                    {'ID': 12, 'Class Name': 'Rerumputan/padang rumput/savanna (Grass/savanna)',
+                     'Description': 'Tutupan vegetasi yang didominasi oleh rumput yang tumbuh secara alami.'},
+                    {'ID': 13, 'Class Name': 'Semak Belukar (Shrub)',
+                     'Description': 'Tutupan vegetasi bukan pohon dengan tinggi ≤5–6 m, biasanya hasil perladangan berpindah atau bekas tebangan.'},
+                    {'ID': 14, 'Class Name': 'Lahan Pertanian (Cropland)',
+                     'Description': 'Tutupan vegetasi yang didominasi tanaman padi, palawija, atau hortikultura.'},
+                    {'ID': 15, 'Class Name': 'Permukiman (Settlement)',
+                     'Description': 'Tutupan yang didominasi oleh bangunan.'},
+                    {'ID': 16, 'Class Name': 'Lahan terbuka (Cleared land)',
+                     'Description': 'Tutupan lahan hampir 100% tanpa vegetasi.'},
+                    {'ID': 17, 'Class Name': 'Tubuh Air (Waterbody)',
+                     'Description': 'Tutupan yang didominasi oleh air seperti sungai, danau, waduk, dan tambak.'},
+                ]
+                
+                # Display table with expandable cards for descriptions
+                st.markdown("**Deskripsi Kelas Skema Klasifikasi RESTORE+**")
+                for item in restore_plus_data:
+                    with st.expander(f"**{item['ID']}. {item['Class Name']}**", expanded=False):
+                        st.markdown(f"{item['Description']}")
     
     if 'ReferenceDataSource' not in st.session_state:
         st.session_state.ReferenceDataSource = False

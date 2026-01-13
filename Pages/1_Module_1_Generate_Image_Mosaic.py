@@ -4,7 +4,7 @@ Module 1: Acquisition of Near cloud free satellite imagery
 This module provides a user interface for fetching satellite imagery from google earth engine python API
 
 Architecture:
-- Backend (module_1.py): Pure earth engine process without UI dependencies
+- Backend (data_acquisition.py): Core backend process, based on google earth engine python API
 - Frontend (this file): Streamlit UI with session state management
 - State synchronization ensures data persistence across page interactions
 """
